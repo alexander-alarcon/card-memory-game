@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.4.3",
+    "@babel/plugin-transform-react-jsx-self": "^7.2.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.5.0",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
@@ -50,6 +52,7 @@
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
     "style-loader": "0.23.1",
+    "tailwindcss": "^1.0.4",
     "terser-webpack-plugin": "1.2.3",
     "ts-pnp": "1.1.2",
     "url-loader": "1.1.2",
