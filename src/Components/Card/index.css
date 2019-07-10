@@ -1,0 +1,29 @@
+.Card__Container {
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+.Card {
+  -webkit-transition: -webkit-transform 500ms;
+  transition: -webkit-transform 500ms;
+  transition: transform 500ms;
+  transition: transform 500ms, -webkit-transform 500ms;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+}
+
+.Card__Back,
+.Card__Front {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.Card__Front {
+  transform: rotateY(180deg);
+}
+
+.Card.flipped {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
