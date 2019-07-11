@@ -10,6 +10,7 @@ function Card({
   isFlipped,
   handleClick,
   solved,
+  disabled,
   ...rest
 }) {
   const cardClasses = `Card relative w-full h-full ${
@@ -17,7 +18,7 @@ function Card({
   }`;
   return (
     <div
-      className="Card__Container w-40 h-40 outline-none"
+      className="Card__Container w-full h-full outline-none"
       role="button"
       aria-pressed="false"
       onClick={handleClick}
@@ -43,11 +44,13 @@ Card.propTypes = {
   isFlipped: PropTypes.bool,
   handleClick: PropTypes.func.isRequired,
   solved: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Card.defaultProps = {
   isFlipped: false,
   solved: false,
+  disabled: false,
 };
 
 export default Card;
