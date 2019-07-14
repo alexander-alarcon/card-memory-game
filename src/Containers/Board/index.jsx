@@ -4,9 +4,22 @@ import { PropTypes } from 'prop-types';
 import './index.css';
 import Card from '../../Components/Card';
 
-function Board({ cards, flipped, handleFlip, disabled, solved, ...rest }) {
+function Board({
+  cards,
+  flipped,
+  handleFlip,
+  disabled,
+  solved,
+  numCols,
+  ...rest
+}) {
   return (
-    <div className="Board w-full h-full">
+    <div
+      className="Board w-full h-full"
+      style={{
+        '--grid-columns': numCols,
+      }}
+    >
       {cards.map(card => {
         const isFlipped = flipped.includes(card.id);
         const isSolved = solved.includes(card.id);
@@ -36,10 +49,12 @@ Board.propTypes = {
   handleFlip: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   solved: PropTypes.arrayOf(PropTypes.string),
+  numCols: PropTypes.number.isRequired,
 };
 
 Board.defaultProps = {
   cards: [],
   solved: [],
 };
+
 export default Board;

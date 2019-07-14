@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import Board from '../Board';
 import initializeDeck from '../../utils/deck';
+
+const nCards = 4;
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -10,7 +12,7 @@ function App() {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    setCards(initializeDeck());
+    setCards(initializeDeck(nCards));
   }, []);
 
   const sameCardFlipped = useCallback(id => flipped.includes(id), [flipped]);
@@ -59,6 +61,7 @@ function App() {
         handleFlip={handleFlip}
         disabled={disabled}
         solved={solved}
+        numCols={nCards}
       />
     </div>
   );

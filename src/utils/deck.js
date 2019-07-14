@@ -12,9 +12,16 @@ const shuffleCards = cards => {
   return array;
 };
 
-export default function initializeDeck() {
+const createCards = num => {
+  const totalCards = (num * num) / 2;
+  const cards = [...Array(totalCards).keys()];
+  return cards;
+};
+
+export default function initializeDeck(nCards) {
   let id = 0;
-  const cards = ['A', 'B', 'C', 'D'].reduce((acc, type) => {
+  let cards = createCards(nCards);
+  cards = cards.reduce((acc, type) => {
     acc.push({
       id: `${(id += 1)}`,
       type,
