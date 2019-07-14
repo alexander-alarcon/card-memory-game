@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import Board from '../Board';
 import initializeDeck from '../../utils/deck';
+
+import { FlipContext } from '../../store/FlipContext';
 
 const nCards = 4;
 
@@ -10,6 +12,8 @@ function App() {
   const [flipped, setFlipped] = useState([]);
   const [solved, setSolved] = useState([]);
   const [disabled, setDisabled] = useState(false);
+
+  const { addOneFlip, addOneMatch, addWrongMatch } = useContext(FlipContext);
 
   useEffect(() => {
     setCards(initializeDeck(nCards));
@@ -37,6 +41,7 @@ function App() {
       if (flipped.length === 0) {
         setFlipped([...flipped, id]);
         setDisabled(false);
+        addOneFlip();
       } else {
         if (sameCardFlipped(id)) {
           setDisabled(false);
@@ -45,12 +50,24 @@ function App() {
         setFlipped([...flipped, id]);
         if (isMatch(id)) {
           setSolved([...solved, ...flipped, id]);
+          addOneMatch();
           resetCards();
+        } else {
+          addWrongMatch();
         }
+        addOneFlip();
         setTimeout(resetCards, 500);
       }
     },
-    [flipped, isMatch, sameCardFlipped, solved],
+    [
+      addOneFlip,
+      addOneMatch,
+      addWrongMatch,
+      flipped,
+      isMatch,
+      sameCardFlipped,
+      solved,
+    ],
   );
 
   return (
