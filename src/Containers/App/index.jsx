@@ -5,19 +5,20 @@ import initializeDeck from '../../utils/deck';
 
 import { FlipContext } from '../../store/FlipContext';
 
-const nCards = 4;
-
 function App() {
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);
   const [solved, setSolved] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [numCols, setNumCols] = useState(2);
 
-  const { addOneFlip, addOneMatch, addWrongMatch } = useContext(FlipContext);
+  const { addOneFlip, addOneMatch, addWin, addWrongMatch, wins } = useContext(
+    FlipContext,
+  );
 
   useEffect(() => {
-    setCards(initializeDeck(nCards));
-  }, []);
+    setCards(initializeDeck(numCols));
+  }, [numCols]);
 
   const sameCardFlipped = useCallback(id => flipped.includes(id), [flipped]);
 
@@ -35,6 +36,22 @@ function App() {
     [cards, flipped],
   );
 
+  const resetValues = useCallback(() => {
+    setCards([]);
+    setFlipped([]);
+    setSolved([]);
+    setDisabled(false);
+  }, []);
+
+  const checkWin = useCallback(() => {
+    if (solved.length === numCols * numCols - 2) {
+      addWin();
+      resetValues();
+      setNumCols(numCols + 2);
+      setCards(initializeDeck(numCols));
+    }
+  }, [addWin, numCols, resetValues, solved.length]);
+
   const handleFlip = useCallback(
     id => {
       setDisabled(true);
@@ -51,6 +68,7 @@ function App() {
         if (isMatch(id)) {
           setSolved([...solved, flipped[0], id]);
           addOneMatch();
+          checkWin();
           resetCards();
         } else {
           addWrongMatch();
@@ -63,6 +81,7 @@ function App() {
       addOneFlip,
       addOneMatch,
       addWrongMatch,
+      checkWin,
       flipped,
       isMatch,
       sameCardFlipped,
@@ -78,7 +97,7 @@ function App() {
         handleFlip={handleFlip}
         disabled={disabled}
         solved={solved}
-        numCols={nCards}
+        numCols={numCols}
       />
     </div>
   );

@@ -5,6 +5,7 @@ const initialState = {
   totalFlips: 0,
   totalMatches: 0,
   wrongMatches: 0,
+  wins: 0,
 };
 
 const addOne = num => num + 1;
@@ -25,6 +26,11 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         wrongMatches: addOne(state.wrongMatches),
+      };
+    case 'ADD_WIN':
+      return {
+        ...state,
+        wins: addOne(state.wins),
       };
     default:
       return state;
@@ -54,12 +60,19 @@ function FlipProvider({ children }) {
     });
   }, []);
 
+  const addWin = useCallback(() => {
+    dispatch({
+      type: 'ADD_WIN',
+    });
+  }, []);
+
   return (
     <FlipContext.Provider
       value={{
         addOneFlip,
         addOneMatch,
         addWrongMatch,
+        addWin,
         ...state,
       }}
     >
