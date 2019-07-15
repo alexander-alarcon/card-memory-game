@@ -3,6 +3,12 @@
   perspective: 1000px;
 }
 
+.Card__Container::after {
+  content: '';
+  display: block;
+  padding-bottom: 100%;
+}
+
 .Card {
   -webkit-transition: -webkit-transform 500ms;
   transition: -webkit-transform 500ms;

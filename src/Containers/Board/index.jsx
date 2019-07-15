@@ -15,7 +15,7 @@ function Board({
 }) {
   return (
     <div
-      className="Board w-full h-full"
+      className="Board w-full max-w-xl"
       style={{
         '--grid-columns': numCols,
       }}

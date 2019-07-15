@@ -1,4 +1,4 @@
-const backSide = 'X';
+const backSide = ' ';
 
 const shuffleCards = cards => {
   const array = [...cards];

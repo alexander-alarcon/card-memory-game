@@ -4,6 +4,8 @@
 
 @tailwind utilities;
 
-* {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
 }

@@ -71,7 +71,7 @@ function App() {
   );
 
   return (
-    <div className="App w-screen h-screen">
+    <div className="App w-screen h-screen flex items-center justify-center">
       <Board
         cards={cards}
         flipped={flipped}

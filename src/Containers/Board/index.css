@@ -1,6 +1,6 @@
 .Board {
   display: grid;
-  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  grid-template-columns: repeat(var(--grid-columns), minmax(2rem, 1fr));
   grid-gap: 10px;
   padding: 10px;
 }
