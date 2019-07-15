@@ -39,7 +39,7 @@ function App() {
     id => {
       setDisabled(true);
       if (flipped.length === 0) {
-        setFlipped([...flipped, id]);
+        setFlipped([id]);
         setDisabled(false);
         addOneFlip();
       } else {
@@ -47,9 +47,9 @@ function App() {
           setDisabled(false);
           return;
         }
-        setFlipped([...flipped, id]);
+        setFlipped([flipped[0], id]);
         if (isMatch(id)) {
-          setSolved([...solved, ...flipped, id]);
+          setSolved([...solved, flipped[0], id]);
           addOneMatch();
           resetCards();
         } else {
