@@ -12,13 +12,19 @@ function App() {
   const [disabled, setDisabled] = useState(false);
   const [numCols, setNumCols] = useState(2);
 
-  const { addOneFlip, addOneMatch, addWin, addWrongMatch } = useContext(
-    FlipContext,
-  );
+  const {
+    addAbandon,
+    addOneFlip,
+    addOneMatch,
+    addWin,
+    addWrongMatch,
+    reduceAbandon,
+  } = useContext(FlipContext);
 
   useEffect(() => {
     setCards(initializeDeck(numCols));
-  }, [numCols]);
+    addAbandon();
+  }, [addAbandon, numCols]);
 
   const sameCardFlipped = useCallback(id => flipped.includes(id), [flipped]);
 
@@ -49,8 +55,9 @@ function App() {
       resetValues();
       setNumCols(numCols + 2);
       setCards(initializeDeck(numCols));
+      reduceAbandon();
     }
-  }, [addWin, numCols, resetValues, solved.length]);
+  }, [addWin, numCols, reduceAbandon, resetValues, solved.length]);
 
   const handleFlip = useCallback(
     id => {

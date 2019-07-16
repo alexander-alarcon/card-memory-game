@@ -7,6 +7,7 @@ const initialState = {
   totalMatches: 0,
   wrongMatches: 0,
   wins: 0,
+  abandoned: 0,
 };
 
 const persistenceSettings = {
@@ -14,6 +15,8 @@ const persistenceSettings = {
 };
 
 const addOne = num => num + 1;
+
+const reduceByOne = num => num - 1;
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -36,6 +39,16 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         wins: addOne(state.wins),
+      };
+    case 'ADD_ABANDON':
+      return {
+        ...state,
+        abandoned: addOne(state.abandoned),
+      };
+    case 'REDUCE_ABANDON':
+      return {
+        ...state,
+        abandoned: reduceByOne(state.abandoned),
       };
     default:
       return state;
@@ -75,6 +88,18 @@ function FlipProvider({ children }) {
     });
   }, [dispatch]);
 
+  const addAbandon = useCallback(() => {
+    dispatch({
+      type: 'ADD_ABANDON',
+    });
+  }, [dispatch]);
+
+  const reduceAbandon = useCallback(() => {
+    dispatch({
+      type: 'REDUCE_ABANDON',
+    });
+  }, [dispatch]);
+
   return (
     <FlipContext.Provider
       value={{
@@ -82,6 +107,8 @@ function FlipProvider({ children }) {
         addOneMatch,
         addWrongMatch,
         addWin,
+        addAbandon,
+        reduceAbandon,
         ...state,
       }}
     >
