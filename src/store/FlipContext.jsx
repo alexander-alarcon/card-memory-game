@@ -1,4 +1,5 @@
-import React, { useCallback, useReducer } from 'react';
+import { usePersistReducer } from 'use-persist';
+import React, { useCallback } from 'react';
 import { PropTypes } from 'prop-types';
 
 const initialState = {
@@ -6,6 +7,10 @@ const initialState = {
   totalMatches: 0,
   wrongMatches: 0,
   wins: 0,
+};
+
+const persistenceSettings = {
+  key: 'card-game',
 };
 
 const addOne = num => num + 1;
@@ -40,31 +45,35 @@ const reducer = (state, { type, payload }) => {
 const FlipContext = React.createContext(initialState);
 
 function FlipProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = usePersistReducer(
+    persistenceSettings,
+    reducer,
+    initialState,
+  );
 
   const addOneFlip = useCallback(() => {
     dispatch({
       type: 'ADD_FLIP',
     });
-  }, []);
+  }, [dispatch]);
 
   const addOneMatch = useCallback(() => {
     dispatch({
       type: 'ADD_MATCH',
     });
-  }, []);
+  }, [dispatch]);
 
   const addWrongMatch = useCallback(() => {
     dispatch({
       type: 'ADD_WRONG_MATCH',
     });
-  }, []);
+  }, [dispatch]);
 
   const addWin = useCallback(() => {
     dispatch({
       type: 'ADD_WIN',
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <FlipContext.Provider

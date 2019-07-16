@@ -12,7 +12,7 @@ function App() {
   const [disabled, setDisabled] = useState(false);
   const [numCols, setNumCols] = useState(2);
 
-  const { addOneFlip, addOneMatch, addWin, addWrongMatch, wins } = useContext(
+  const { addOneFlip, addOneMatch, addWin, addWrongMatch } = useContext(
     FlipContext,
   );
 
