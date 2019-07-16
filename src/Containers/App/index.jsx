@@ -1,11 +1,16 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
+import Menu from '../Menu';
 import Board from '../Board';
+
 import initializeDeck from '../../utils/deck';
 
 import { FlipContext } from '../../store/FlipContext';
 
+import GameStates from '../../constants/GameStates';
+
 function App() {
+  const [gameState, setGameState] = useState(GameStates.MENU);
   const [cards, setCards] = useState([]);
   const [flipped, setFlipped] = useState([]);
   const [solved, setSolved] = useState([]);
@@ -18,13 +23,20 @@ function App() {
     addOneMatch,
     addWin,
     addWrongMatch,
-    reduceAbandon,
   } = useContext(FlipContext);
 
   useEffect(() => {
     setCards(initializeDeck(numCols));
-    addAbandon();
-  }, [addAbandon, numCols]);
+  }, [numCols, cards.length]);
+
+  const handleInitGame = useCallback(
+    num => {
+      setGameState(GameStates.PLAYING);
+      setNumCols(num);
+      addAbandon();
+    },
+    [addAbandon],
+  );
 
   const sameCardFlipped = useCallback(id => flipped.includes(id), [flipped]);
 
@@ -44,20 +56,19 @@ function App() {
 
   const resetValues = useCallback(() => {
     setCards([]);
-    setFlipped([]);
-    setSolved([]);
-    setDisabled(false);
   }, []);
 
   const checkWin = useCallback(() => {
     if (solved.length === numCols * numCols - 2) {
       addWin();
-      resetValues();
-      setNumCols(numCols + 2);
-      setCards(initializeDeck(numCols));
-      reduceAbandon();
+      setTimeout(() => setSolved([]), 500);
+      resetCards();
+      setTimeout(() => {
+        setGameState(GameStates.MENU);
+        resetValues();
+      }, 1200);
     }
-  }, [addWin, numCols, reduceAbandon, resetValues, solved.length]);
+  }, [addWin, numCols, resetValues, solved.length]);
 
   const handleFlip = useCallback(
     id => {
@@ -98,14 +109,19 @@ function App() {
 
   return (
     <div className="App w-screen h-screen flex items-center justify-center">
-      <Board
-        cards={cards}
-        flipped={flipped}
-        handleFlip={handleFlip}
-        disabled={disabled}
-        solved={solved}
-        numCols={numCols}
-      />
+      {gameState === GameStates.MENU && (
+        <Menu handleInitGame={handleInitGame} />
+      )}
+      {gameState === GameStates.PLAYING && (
+        <Board
+          cards={cards}
+          flipped={flipped}
+          handleFlip={handleFlip}
+          disabled={disabled}
+          solved={solved}
+          numCols={numCols}
+        />
+      )}
     </div>
   );
 }

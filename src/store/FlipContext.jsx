@@ -39,16 +39,12 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         wins: addOne(state.wins),
+        abandoned: reduceByOne(state.abandoned),
       };
     case 'ADD_ABANDON':
       return {
         ...state,
         abandoned: addOne(state.abandoned),
-      };
-    case 'REDUCE_ABANDON':
-      return {
-        ...state,
-        abandoned: reduceByOne(state.abandoned),
       };
     default:
       return state;
@@ -94,12 +90,6 @@ function FlipProvider({ children }) {
     });
   }, [dispatch]);
 
-  const reduceAbandon = useCallback(() => {
-    dispatch({
-      type: 'REDUCE_ABANDON',
-    });
-  }, [dispatch]);
-
   return (
     <FlipContext.Provider
       value={{
@@ -108,7 +98,6 @@ function FlipProvider({ children }) {
         addWrongMatch,
         addWin,
         addAbandon,
-        reduceAbandon,
         ...state,
       }}
     >
