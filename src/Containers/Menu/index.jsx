@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 
 import Button from '../../Components/Button';
+import Range from '../../Components/Range';
 
 function Menu({ handleInitGame, ...rest }) {
+  const [customGrid, setCustomGrid] = useState(2);
+
   return (
     <div className="Menu flex flex-col items-center justify-center w-full max-w-xl">
       <p className="my-8 font-bold uppercase italic">Memory Game</p>
@@ -34,6 +37,19 @@ function Menu({ handleInitGame, ...rest }) {
       >
         Hard
       </Button>
+      <Button
+        id="btn-custom"
+        className="btn"
+        handleClick={() => {
+          handleInitGame(customGrid);
+        }}
+      >
+        Custom
+      </Button>
+      <Range
+        value={customGrid}
+        handleChange={event => setCustomGrid(parseInt(event.target.value, 10))}
+      />
     </div>
   );
 }
