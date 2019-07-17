@@ -1,0 +1,4 @@
+.ProgressBar__Fill {
+  transform-origin: left;
+  transition: transform 1s ease;
+}

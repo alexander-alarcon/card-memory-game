@@ -14,7 +14,7 @@ function Menu({ handleInitGame, ...rest }) {
         id="btn-easy"
         className="btn"
         handleClick={() => {
-          handleInitGame(4);
+          handleInitGame(4, 60);
         }}
       >
         Easy
@@ -23,7 +23,7 @@ function Menu({ handleInitGame, ...rest }) {
         id="btn-medium"
         className="btn"
         handleClick={() => {
-          handleInitGame(6);
+          handleInitGame(6, 180);
         }}
       >
         Medium
@@ -32,7 +32,7 @@ function Menu({ handleInitGame, ...rest }) {
         id="btn-hard"
         className="btn"
         handleClick={() => {
-          handleInitGame(8);
+          handleInitGame(8, 300);
         }}
       >
         Hard
@@ -41,7 +41,8 @@ function Menu({ handleInitGame, ...rest }) {
         id="btn-custom"
         className="btn"
         handleClick={() => {
-          handleInitGame(customGrid);
+          const seconds = (customGrid * 60) / 4;
+          handleInitGame(customGrid, seconds);
         }}
       >
         Custom

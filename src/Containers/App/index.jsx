@@ -8,6 +8,7 @@ import initializeDeck from '../../utils/deck';
 import { FlipContext } from '../../store/FlipContext';
 
 import GameStates from '../../constants/GameStates';
+import Countdown from '../../Components/Countdown';
 
 function App() {
   const [gameState, setGameState] = useState(GameStates.MENU);
@@ -16,6 +17,8 @@ function App() {
   const [solved, setSolved] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [numCols, setNumCols] = useState(2);
+  const [seconds, setSeconds] = useState(60);
+  const [timer, setTimer] = useState(true);
 
   const {
     addAbandon,
@@ -30,10 +33,12 @@ function App() {
   }, [numCols, cards.length]);
 
   const handleInitGame = useCallback(
-    num => {
+    (num, secs) => {
       setGameState(GameStates.PLAYING);
       setNumCols(num);
       addAbandon();
+      setTimer(true);
+      setSeconds(secs);
     },
     [addAbandon],
   );
@@ -62,6 +67,7 @@ function App() {
     if (solved.length === numCols * numCols - 2) {
       addWin();
       setTimeout(() => setSolved([]), 500);
+      setTimer(false);
       resetCards();
       setTimeout(() => {
         setGameState(GameStates.MENU);
@@ -108,19 +114,22 @@ function App() {
   );
 
   return (
-    <div className="App w-screen h-screen flex items-center justify-center">
+    <div className="App w-screen h-screen flex flex-col items-center justify-center">
       {gameState === GameStates.MENU && (
         <Menu handleInitGame={handleInitGame} />
       )}
       {gameState === GameStates.PLAYING && (
-        <Board
-          cards={cards}
-          flipped={flipped}
-          handleFlip={handleFlip}
-          disabled={disabled}
-          solved={solved}
-          numCols={numCols}
-        />
+        <React.Fragment>
+          <Board
+            cards={cards}
+            flipped={flipped}
+            handleFlip={handleFlip}
+            disabled={disabled}
+            solved={solved}
+            numCols={numCols}
+          />
+          <Countdown seconds={seconds} enabled={timer} progressBar />
+        </React.Fragment>
       )}
     </div>
   );
