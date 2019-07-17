@@ -3,11 +3,12 @@ import React, { useCallback } from 'react';
 import { PropTypes } from 'prop-types';
 
 const initialState = {
+  lost: 0,
+  wins: 0,
+  abandoned: 0,
   totalFlips: 0,
   totalMatches: 0,
   wrongMatches: 0,
-  wins: 0,
-  abandoned: 0,
 };
 
 const persistenceSettings = {
@@ -45,6 +46,12 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         abandoned: addOne(state.abandoned),
+      };
+    case 'ADD_LOST':
+      return {
+        ...state,
+        lost: addOne(state.lost),
+        abandoned: reduceByOne(state.abandoned),
       };
     default:
       return state;
@@ -90,6 +97,12 @@ function FlipProvider({ children }) {
     });
   }, [dispatch]);
 
+  const addLost = useCallback(() => {
+    dispatch({
+      type: 'ADD_LOST',
+    });
+  }, [dispatch]);
+
   return (
     <FlipContext.Provider
       value={{
@@ -98,6 +111,7 @@ function FlipProvider({ children }) {
         addWrongMatch,
         addWin,
         addAbandon,
+        addLost,
         ...state,
       }}
     >

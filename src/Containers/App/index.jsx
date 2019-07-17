@@ -21,10 +21,11 @@ function App() {
   const [timer, setTimer] = useState(true);
 
   const {
+    addWin,
+    addLost,
     addAbandon,
     addOneFlip,
     addOneMatch,
-    addWin,
     addWrongMatch,
   } = useContext(FlipContext);
 
@@ -75,6 +76,19 @@ function App() {
       }, 1200);
     }
   }, [addWin, numCols, resetValues, solved.length]);
+
+  const checkGameOver = useCallback(() => {
+    if (solved.length !== numCols * numCols - 2) {
+      addLost();
+      setTimeout(() => setSolved([]), 500);
+      setTimer(false);
+      resetCards();
+      setTimeout(() => {
+        setGameState(GameStates.MENU);
+        resetValues();
+      }, 1200);
+    }
+  }, [addLost, numCols, resetValues, solved.length]);
 
   const handleFlip = useCallback(
     id => {
@@ -128,7 +142,12 @@ function App() {
             solved={solved}
             numCols={numCols}
           />
-          <Countdown seconds={seconds} enabled={timer} progressBar />
+          <Countdown
+            seconds={seconds}
+            enabled={timer}
+            onGameOver={checkGameOver}
+            progressBar
+          />
         </React.Fragment>
       )}
     </div>

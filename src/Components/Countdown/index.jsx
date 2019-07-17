@@ -5,7 +5,7 @@ import './index.css';
 
 let countdown;
 
-function Countdown({ seconds, enabled, progressBar }) {
+function Countdown({ seconds, enabled, onGameOver, progressBar }) {
   const fillEl = useRef(null);
 
   const updateWidth = useCallback(
@@ -37,6 +37,7 @@ function Countdown({ seconds, enabled, progressBar }) {
         const secondsLeft = Math.round((then - Date.now()) / 1000);
 
         if (secondsLeft < 0 || !enabled) {
+          onGameOver();
           clearInterval(countdown);
           // callback();
           return;
@@ -45,7 +46,7 @@ function Countdown({ seconds, enabled, progressBar }) {
         updateWidth(seconds, secondsLeft);
       }, 1000);
     },
-    [enabled, seconds, updateWidth],
+    [enabled, onGameOver, seconds, updateWidth],
   );
 
   useEffect(() => {
@@ -72,6 +73,7 @@ function Countdown({ seconds, enabled, progressBar }) {
 Countdown.propTypes = {
   seconds: PropTypes.number.isRequired,
   enabled: PropTypes.bool.isRequired,
+  onGameOver: PropTypes.func.isRequired,
   progressBar: PropTypes.bool,
 };
 
