@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 import App from './Containers/App';
-import { FlipProvider } from './store/FlipContext';
+
+import { GameProvider } from './store/GameContext';
 
 const app = (
-  <FlipProvider>
+  <GameProvider>
     <App />
-  </FlipProvider>
+  </GameProvider>
 );
 ReactDOM.render(app, document.getElementById('root'));

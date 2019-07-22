@@ -1,152 +1,156 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import Menu from '../Menu';
 import Board from '../Board';
 
-import initializeDeck from '../../utils/deck';
-
-import { FlipContext } from '../../store/FlipContext';
+import { GameContext } from '../../store/GameContext';
 
 import GameStates from '../../constants/GameStates';
 import Countdown from '../../Components/Countdown';
 
 function App() {
-  const [gameState, setGameState] = useState(GameStates.MENU);
-  const [cards, setCards] = useState([]);
-  const [flipped, setFlipped] = useState([]);
-  const [solved, setSolved] = useState([]);
-  const [disabled, setDisabled] = useState(false);
-  const [numCols, setNumCols] = useState(2);
-  const [seconds, setSeconds] = useState(60);
-  const [timer, setTimer] = useState(true);
-
   const {
+    game,
     addWin,
     addLost,
+    initGame,
+    resetGame,
     addAbandon,
     addOneFlip,
+    finishGame,
     addOneMatch,
+    enableBoard,
+    disableBoard,
     addWrongMatch,
-  } = useContext(FlipContext);
-
-  useEffect(() => {
-    setCards(initializeDeck(numCols));
-  }, [numCols, cards.length]);
+    addFlippedCard,
+    addSolvedCards,
+    removeFlippedCard,
+  } = useContext(GameContext);
 
   const handleInitGame = useCallback(
-    (num, secs) => {
-      setGameState(GameStates.PLAYING);
-      setNumCols(num);
-      addAbandon();
-      setTimer(true);
-      setSeconds(secs);
+    (level, num, secs) => {
+      initGame(level, num, secs);
+      addAbandon(level);
     },
-    [addAbandon],
+    [addAbandon, initGame],
   );
 
-  const sameCardFlipped = useCallback(id => flipped.includes(id), [flipped]);
-
-  const resetCards = () => {
-    setFlipped([]);
-    setDisabled(false);
-  };
+  const sameCardFlipped = useCallback(id => game.flipped.includes(id), [
+    game.flipped,
+  ]);
 
   const isMatch = useCallback(
     id => {
-      const clickedCard = cards.find(card => card.id === id);
-      const flippedCard = cards.find(card => card.id === flipped[0]);
+      const clickedCard = game.deck.find(card => card.id === id);
+      const flippedCard = game.deck.find(card => card.id === game.flipped[0]);
       return clickedCard.type === flippedCard.type;
     },
-    [cards, flipped],
+    [game.deck, game.flipped],
   );
 
-  const resetValues = useCallback(() => {
-    setCards([]);
-  }, []);
-
   const checkWin = useCallback(() => {
-    if (solved.length === numCols * numCols - 2) {
-      addWin();
-      setTimeout(() => setSolved([]), 500);
-      setTimer(false);
-      resetCards();
+    if (game.solved.length === game.numCols * game.numCols - 2) {
+      addWin(game.level);
+      finishGame();
       setTimeout(() => {
-        setGameState(GameStates.MENU);
-        resetValues();
+        resetGame();
       }, 1200);
     }
-  }, [addWin, numCols, resetValues, solved.length]);
+  }, [
+    addWin,
+    finishGame,
+    game.level,
+    game.numCols,
+    game.solved.length,
+    resetGame,
+  ]);
 
   const checkGameOver = useCallback(() => {
-    if (solved.length !== numCols * numCols - 2) {
-      addLost();
-      setTimeout(() => setSolved([]), 500);
-      setTimer(false);
-      resetCards();
+    if (
+      game.solved.length !== game.numCols * game.numCols - 2 &&
+      game.gameState === GameStates.PLAYING
+    ) {
+      addLost(game.level);
+      finishGame();
       setTimeout(() => {
-        setGameState(GameStates.MENU);
-        resetValues();
+        resetGame();
       }, 1200);
     }
-  }, [addLost, numCols, resetValues, solved.length]);
+  }, [
+    addLost,
+    finishGame,
+    game.gameState,
+    game.level,
+    game.numCols,
+    game.solved.length,
+    resetGame,
+  ]);
 
   const handleFlip = useCallback(
     id => {
-      setDisabled(true);
-      if (flipped.length === 0) {
-        setFlipped([id]);
-        setDisabled(false);
-        addOneFlip();
+      disableBoard();
+      if (game.flipped.length === 0) {
+        addOneFlip(game.level);
+        addFlippedCard(id);
+        enableBoard();
       } else {
+        addOneFlip(game.level);
         if (sameCardFlipped(id)) {
-          setDisabled(false);
+          enableBoard();
           return;
         }
-        setFlipped([flipped[0], id]);
+        addFlippedCard(id);
         if (isMatch(id)) {
-          setSolved([...solved, flipped[0], id]);
-          addOneMatch();
+          addOneMatch(game.level);
+          addSolvedCards(id);
+          removeFlippedCard();
           checkWin();
-          resetCards();
+          enableBoard();
         } else {
-          addWrongMatch();
+          addWrongMatch(game.level);
+          setTimeout(() => {
+            removeFlippedCard();
+          }, 500);
+          enableBoard();
         }
-        addOneFlip();
-        setTimeout(resetCards, 500);
       }
     },
     [
+      addFlippedCard,
       addOneFlip,
       addOneMatch,
+      addSolvedCards,
       addWrongMatch,
       checkWin,
-      flipped,
+      disableBoard,
+      enableBoard,
+      game,
       isMatch,
+      removeFlippedCard,
       sameCardFlipped,
-      solved,
     ],
   );
 
   return (
     <div className="App w-screen h-screen flex flex-col items-center justify-center">
-      {gameState === GameStates.MENU && (
+      {game.gameState === GameStates.MENU && (
         <Menu handleInitGame={handleInitGame} />
       )}
-      {gameState === GameStates.PLAYING && (
+      {game.gameState === GameStates.PLAYING && (
         <React.Fragment>
           <Board
-            cards={cards}
-            flipped={flipped}
+            cards={game.deck}
+            flipped={game.flipped}
             handleFlip={handleFlip}
-            disabled={disabled}
-            solved={solved}
-            numCols={numCols}
+            enabled={game.isBoardEnabled}
+            solved={game.solved}
+            numCols={game.numCols}
           />
           <Countdown
-            seconds={seconds}
-            enabled={timer}
+            seconds={game.seconds}
             onGameOver={checkGameOver}
-            progressBar
+            enabled={game.gameState === GameStates.PLAYING}
+            progressBar={false}
           />
         </React.Fragment>
       )}

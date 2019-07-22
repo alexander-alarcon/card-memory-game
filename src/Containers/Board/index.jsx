@@ -8,7 +8,7 @@ function Board({
   cards,
   flipped,
   handleFlip,
-  disabled,
+  enabled,
   solved,
   numCols,
   ...rest
@@ -23,7 +23,7 @@ function Board({
       {cards.map(card => {
         const isFlipped = flipped.includes(card.id);
         const isSolved = solved.includes(card.id);
-        const isDisabled = disabled || isSolved;
+        const isEnabled = enabled || isSolved;
 
         return (
           <Card
@@ -34,8 +34,8 @@ function Board({
             backSide={card.backSide}
             isFlipped={isFlipped || isSolved}
             solved={isSolved}
-            disabled={isDisabled}
-            handleClick={() => (isDisabled ? null : handleFlip(card.id))}
+            disabled={isEnabled}
+            handleClick={() => (isEnabled ? handleFlip(card.id) : null)}
           />
         );
       })}
@@ -47,7 +47,7 @@ Board.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.shape({})),
   flipped: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleFlip: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  enabled: PropTypes.bool.isRequired,
   solved: PropTypes.arrayOf(PropTypes.string),
   numCols: PropTypes.number.isRequired,
 };
