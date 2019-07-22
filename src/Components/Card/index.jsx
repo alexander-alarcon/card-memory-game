@@ -5,12 +5,12 @@ import './index.css';
 
 function Card({
   id,
+  onClick,
   backSide,
+  isSolved,
   frontSide,
   isFlipped,
-  handleClick,
-  solved,
-  disabled,
+  isDisabled,
   ...rest
 }) {
   const cardClasses = `Card absolute w-full h-full rounded-lg ${
@@ -22,7 +22,7 @@ function Card({
       className="Card__Container outline-none rounded-lg"
       role="button"
       aria-pressed="false"
-      onClick={handleClick}
+      onClick={onClick}
       onKeyDown={() => {}}
       tabIndex={0}
     >
@@ -50,15 +50,15 @@ Card.propTypes = {
   backSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   frontSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   isFlipped: PropTypes.bool,
-  handleClick: PropTypes.func.isRequired,
-  solved: PropTypes.bool,
-  disabled: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+  isSolved: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 Card.defaultProps = {
   isFlipped: false,
-  solved: false,
-  disabled: false,
+  isSolved: false,
+  isDisabled: false,
 };
 
 export default Card;
