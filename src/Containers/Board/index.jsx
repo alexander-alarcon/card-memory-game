@@ -33,8 +33,8 @@ function Board({
             isDisabled={isEnabled}
             backSide={card.backSide}
             frontSide={card.frontSide}
+            key={`${card.type}-${card.id}`}
             isFlipped={isFlipped || isSolved}
-            flippedkey={`${card.type}-${card.id}`}
             onClick={() => (isBoardEnabled ? onFlip(card.id) : null)}
           />
         );
@@ -47,7 +47,14 @@ Board.propTypes = {
   onFlip: PropTypes.func.isRequired,
   isEnabled: PropTypes.bool.isRequired,
   numCols: PropTypes.number.isRequired,
-  cards: PropTypes.arrayOf(PropTypes.shape({})),
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      backSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+      frontSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    }),
+  ),
   solvedCards: PropTypes.arrayOf(PropTypes.string),
   flippedCards: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

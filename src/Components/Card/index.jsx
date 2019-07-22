@@ -46,18 +46,18 @@ function Card({
 }
 
 Card.propTypes = {
+  isSolved: PropTypes.bool,
+  isFlipped: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
   backSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   frontSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-  isFlipped: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-  isSolved: PropTypes.bool,
-  isDisabled: PropTypes.bool,
 };
 
 Card.defaultProps = {
-  isFlipped: false,
   isSolved: false,
+  isFlipped: false,
   isDisabled: false,
 };
 
