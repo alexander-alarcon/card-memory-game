@@ -134,23 +134,23 @@ function App() {
   return (
     <div className="App w-screen h-screen flex flex-col items-center justify-center">
       {game.gameState === GameStates.MENU && (
-        <Menu handleInitGame={handleInitGame} />
+        <Menu onInitGame={handleInitGame} />
       )}
       {game.gameState === GameStates.PLAYING && (
         <React.Fragment>
           <Board
             cards={game.deck}
-            flipped={game.flipped}
-            handleFlip={handleFlip}
-            enabled={game.isBoardEnabled}
-            solved={game.solved}
+            onFlip={handleFlip}
             numCols={game.numCols}
+            solvedCards={game.solved}
+            flippedCards={game.flipped}
+            isEnabled={game.isBoardEnabled}
           />
           <Countdown
+            progressBar={false}
             seconds={game.seconds}
             onGameOver={checkGameOver}
-            enabled={game.gameState === GameStates.PLAYING}
-            progressBar={false}
+            isEnabled={game.gameState === GameStates.PLAYING}
           />
         </React.Fragment>
       )}

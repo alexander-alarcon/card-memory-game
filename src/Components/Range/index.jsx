@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Range({ id, min, max, step, value, handleChange, ...rest }) {
+function Range({ id, min, max, step, value, onChange, ...rest }) {
   let options = [];
 
   for (let index = min; index <= max; index += step) {
@@ -29,7 +29,7 @@ function Range({ id, min, max, step, value, handleChange, ...rest }) {
         {...rest}
         list="tickmarks"
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
       />
 
       <datalist id="tickmarks">{options}</datalist>
@@ -39,7 +39,7 @@ function Range({ id, min, max, step, value, handleChange, ...rest }) {
 
 Range.propTypes = {
   value: PropTypes.number.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   id: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,

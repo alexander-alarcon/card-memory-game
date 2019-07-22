@@ -8,12 +8,13 @@ import React, {
 import { PropTypes } from 'prop-types';
 
 import './index.css';
+
 import { GameContext } from '../../store/GameContext';
 import GameStates from '../../constants/GameStates';
 
 let countdown;
 
-function Countdown({ enabled, onGameOver, progressBar }) {
+function Countdown({ isEnabled, onGameOver, progressBar }) {
   const fillEl = useRef(null);
   const { addLost, game } = useContext(GameContext);
   const [secondsLeft, setSecondsLeft] = useState(game.seconds);
@@ -84,7 +85,7 @@ function Countdown({ enabled, onGameOver, progressBar }) {
 }
 
 Countdown.propTypes = {
-  enabled: PropTypes.bool.isRequired,
+  isEnabled: PropTypes.bool.isRequired,
   onGameOver: PropTypes.func.isRequired,
   progressBar: PropTypes.bool,
 };

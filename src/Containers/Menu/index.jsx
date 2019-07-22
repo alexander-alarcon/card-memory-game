@@ -2,25 +2,23 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 import Button from '../../Components/Button';
-// import Range from '../../Components/Range';
 
-// import { GameContext } from '../../store/GameContext';
 import levels from '../../constants/Levels';
 
-function Menu({ handleInitGame, ...rest }) {
+function Menu({ onInitGame, ...rest }) {
   return (
     <div className="Menu flex flex-col items-center justify-center w-full max-w-xl">
       <p className="my-8 font-bold uppercase italic">Memory Game</p>
       {levels.map(({ name, numCols, seconds }) => (
         <Button
-          key={`btn-${name}`}
-          id={`btn-${name}`}
           className="btn"
-          handleClick={() => {
-            handleInitGame(name, numCols, seconds);
+          id={`btn-${name}`}
+          key={`btn-${name}`}
+          onClick={() => {
+            onInitGame(name, numCols, seconds);
           }}
         >
-          {name.toUpperCase()}
+          {name}
         </Button>
       ))}
     </div>
@@ -28,7 +26,7 @@ function Menu({ handleInitGame, ...rest }) {
 }
 
 Menu.propTypes = {
-  handleInitGame: PropTypes.func.isRequired,
+  onInitGame: PropTypes.func.isRequired,
 };
 
 export default Menu;

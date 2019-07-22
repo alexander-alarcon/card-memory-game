@@ -6,11 +6,11 @@ import Card from '../../Components/Card';
 
 function Board({
   cards,
-  flipped,
-  handleFlip,
-  enabled,
-  solved,
+  onFlip,
   numCols,
+  isEnabled,
+  solvedCards,
+  flippedCards,
   ...rest
 }) {
   return (
@@ -21,21 +21,21 @@ function Board({
       }}
     >
       {cards.map(card => {
-        const isFlipped = flipped.includes(card.id);
-        const isSolved = solved.includes(card.id);
-        const isEnabled = enabled || isSolved;
+        const isFlipped = flippedCards.includes(card.id);
+        const isSolved = solvedCards.includes(card.id);
+        const isBoardEnabled = isEnabled || isSolved;
 
         return (
           <Card
-            key={`${card.type}-${card.id}`}
             id={card.id}
             type={card.type}
-            frontSide={card.frontSide}
+            isSolved={isSolved}
+            isDisabled={isEnabled}
             backSide={card.backSide}
+            frontSide={card.frontSide}
+            key={`${card.type}-${card.id}`}
             isFlipped={isFlipped || isSolved}
-            solved={isSolved}
-            disabled={isEnabled}
-            handleClick={() => (isEnabled ? handleFlip(card.id) : null)}
+            onClick={() => (isBoardEnabled ? onFlip(card.id) : null)}
           />
         );
       })}
@@ -44,17 +44,24 @@ function Board({
 }
 
 Board.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.shape({})),
-  flipped: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleFlip: PropTypes.func.isRequired,
-  enabled: PropTypes.bool.isRequired,
-  solved: PropTypes.arrayOf(PropTypes.string),
+  onFlip: PropTypes.func.isRequired,
+  isEnabled: PropTypes.bool.isRequired,
   numCols: PropTypes.number.isRequired,
+  cards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      backSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+      frontSide: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    }),
+  ),
+  solvedCards: PropTypes.arrayOf(PropTypes.string),
+  flippedCards: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 Board.defaultProps = {
   cards: [],
-  solved: [],
+  solvedCards: [],
 };
 
 export default Board;
