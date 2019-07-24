@@ -51,8 +51,9 @@ function App() {
   const checkWin = useCallback(() => {
     if (game.solved.length === game.numCols * game.numCols - 2) {
       addWin(game.level);
-      finishGame();
+      finishGame(game.level, game.startDate, Date.now());
       setTimeout(() => {
+        // checkBestTime();
         resetGame();
       }, 1200);
     }
@@ -62,6 +63,7 @@ function App() {
     game.level,
     game.numCols,
     game.solved.length,
+    game.startDate,
     resetGame,
   ]);
 

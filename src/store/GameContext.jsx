@@ -13,6 +13,7 @@ const levels = Levels.reduce(
     [level.name]: {
       lost: 0,
       wins: 0,
+      bestTime: 0,
       abandoned: 0,
       totalFlips: 0,
       totalMatches: 0,
@@ -32,7 +33,8 @@ const initialState = {
     solved: [],
     deck: [],
     isBoardEnabled: false,
-    startDate: '',
+    startDate: 0,
+    finishDate: 0,
   },
   persist: {
     ...levels,
@@ -75,11 +77,19 @@ function GameProvider({ children }) {
     });
   }, [dispatch]);
 
-  const finishGame = useCallback(() => {
-    dispatch({
-      type: 'FINISH_GAME',
-    });
-  }, [dispatch]);
+  const finishGame = useCallback(
+    (level, startDate, finishDate) => {
+      dispatch({
+        type: 'FINISH_GAME',
+        payload: {
+          startDate,
+          finishDate,
+          level,
+        },
+      });
+    },
+    [dispatch],
+  );
 
   const enableBoard = useCallback(() => {
     dispatch({
@@ -201,20 +211,20 @@ function GameProvider({ children }) {
   return (
     <GameContext.Provider
       value={{
-        addAbandon,
-        addFlippedCard,
-        addLost,
-        addOneFlip,
-        addOneMatch,
-        addSolvedCards,
-        addWrongMatch,
         addWin,
-        disableBoard,
-        enableBoard,
-        finishGame,
+        addLost,
         initGame,
-        removeFlippedCard,
         resetGame,
+        addAbandon,
+        addOneFlip,
+        finishGame,
+        addOneMatch,
+        enableBoard,
+        disableBoard,
+        addWrongMatch,
+        addFlippedCard,
+        addSolvedCards,
+        removeFlippedCard,
         ...state,
       }}
     >
