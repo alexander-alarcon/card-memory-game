@@ -1,0 +1,34 @@
+.Stats__Totals_scores,
+.Stats__Totals_flips,
+.Stats__BestTimes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.Stats:hover .Stats__Total {
+  opacity: 0;
+}
+
+.Stats:hover .Stats__Levels {
+  opacity: 1;
+}
+.Stats__Total {
+  right: 0.25em;
+}
+.Stats__Total,
+.Stats__Levels {
+  transition: opacity 0.5s ease-in;
+}
+
+.Stats__Levels {
+  opacity: 0;
+  right: 0;
+}
+
+.Stats__Levels span {
+  padding-right: 0.25em;
+}
+
+span + span {
+  border-left: 1px solid;
+}

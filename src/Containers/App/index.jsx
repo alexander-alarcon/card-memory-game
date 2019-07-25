@@ -6,7 +6,9 @@ import Board from '../Board';
 import { GameContext } from '../../store/GameContext';
 
 import GameStates from '../../constants/GameStates';
+
 import Countdown from '../../Components/Countdown';
+import Stats from '../../Components/Stats';
 
 function App() {
   const {
@@ -73,7 +75,7 @@ function App() {
       game.gameState === GameStates.PLAYING
     ) {
       addLost(game.level);
-      finishGame();
+      finishGame(game.level, game.startDate, Date.now());
       setTimeout(() => {
         resetGame();
       }, 1200);
@@ -85,6 +87,7 @@ function App() {
     game.level,
     game.numCols,
     game.solved.length,
+    game.startDate,
     resetGame,
   ]);
 
@@ -136,7 +139,10 @@ function App() {
   return (
     <div className="App w-screen h-screen flex flex-col items-center justify-center">
       {game.gameState === GameStates.MENU && (
-        <Menu onInitGame={handleInitGame} />
+        <React.Fragment>
+          <Menu onInitGame={handleInitGame} />
+          <Stats />
+        </React.Fragment>
       )}
       {game.gameState === GameStates.PLAYING && (
         <React.Fragment>
