@@ -19,6 +19,7 @@ function App() {
     resetGame,
     addAbandon,
     addOneFlip,
+    clearBoard,
     finishGame,
     addOneMatch,
     enableBoard,
@@ -53,14 +54,17 @@ function App() {
   const checkWin = useCallback(() => {
     if (game.solved.length === game.numCols * game.numCols - 2) {
       addWin(game.level);
-      finishGame(game.level, game.startDate, Date.now());
       setTimeout(() => {
-        // checkBestTime();
+        clearBoard();
+      }, 500);
+      setTimeout(() => {
+        finishGame(game.level, game.startDate, Date.now() - 500);
         resetGame();
       }, 1200);
     }
   }, [
     addWin,
+    clearBoard,
     finishGame,
     game.level,
     game.numCols,
@@ -75,19 +79,20 @@ function App() {
       game.gameState === GameStates.PLAYING
     ) {
       addLost(game.level);
-      finishGame(game.level, game.startDate, Date.now());
+      setTimeout(() => {
+        clearBoard();
+      }, 500);
       setTimeout(() => {
         resetGame();
       }, 1200);
     }
   }, [
     addLost,
-    finishGame,
+    clearBoard,
     game.gameState,
     game.level,
     game.numCols,
     game.solved.length,
-    game.startDate,
     resetGame,
   ]);
 
