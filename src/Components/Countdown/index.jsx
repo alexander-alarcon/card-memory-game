@@ -39,7 +39,7 @@ function Countdown({ isEnabled, onGameOver, progressBar }) {
 
     countdown = setInterval(() => {
       setSecondsLeft(Math.round((then - Date.now()) / 1000));
-      if (secondsLeft < 1) {
+      if (secondsLeft <= 1) {
         onGameOver();
         clearInterval(countdown);
         return;

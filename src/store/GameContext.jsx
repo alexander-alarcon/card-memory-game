@@ -77,6 +77,12 @@ function GameProvider({ children }) {
     });
   }, [dispatch]);
 
+  const clearBoard = useCallback(() => {
+    dispatch({
+      type: 'CLEAR_BOARD',
+    });
+  }, [dispatch]);
+
   const finishGame = useCallback(
     (level, startDate, finishDate) => {
       dispatch({
@@ -217,6 +223,7 @@ function GameProvider({ children }) {
         resetGame,
         addAbandon,
         addOneFlip,
+        clearBoard,
         finishGame,
         addOneMatch,
         enableBoard,

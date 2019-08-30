@@ -6,7 +6,9 @@ import Board from '../Board';
 import { GameContext } from '../../store/GameContext';
 
 import GameStates from '../../constants/GameStates';
+
 import Countdown from '../../Components/Countdown';
+import Stats from '../../Components/Stats';
 
 function App() {
   const {
@@ -17,6 +19,7 @@ function App() {
     resetGame,
     addAbandon,
     addOneFlip,
+    clearBoard,
     finishGame,
     addOneMatch,
     enableBoard,
@@ -51,14 +54,17 @@ function App() {
   const checkWin = useCallback(() => {
     if (game.solved.length === game.numCols * game.numCols - 2) {
       addWin(game.level);
-      finishGame(game.level, game.startDate, Date.now());
       setTimeout(() => {
-        // checkBestTime();
+        clearBoard();
+      }, 500);
+      setTimeout(() => {
+        finishGame(game.level, game.startDate, Date.now() - 500);
         resetGame();
       }, 1200);
     }
   }, [
     addWin,
+    clearBoard,
     finishGame,
     game.level,
     game.numCols,
@@ -73,14 +79,16 @@ function App() {
       game.gameState === GameStates.PLAYING
     ) {
       addLost(game.level);
-      finishGame();
+      setTimeout(() => {
+        clearBoard();
+      }, 500);
       setTimeout(() => {
         resetGame();
       }, 1200);
     }
   }, [
     addLost,
-    finishGame,
+    clearBoard,
     game.gameState,
     game.level,
     game.numCols,
@@ -136,7 +144,10 @@ function App() {
   return (
     <div className="App w-screen h-screen flex flex-col items-center justify-center">
       {game.gameState === GameStates.MENU && (
-        <Menu onInitGame={handleInitGame} />
+        <React.Fragment>
+          <Menu onInitGame={handleInitGame} />
+          <Stats />
+        </React.Fragment>
       )}
       {game.gameState === GameStates.PLAYING && (
         <React.Fragment>

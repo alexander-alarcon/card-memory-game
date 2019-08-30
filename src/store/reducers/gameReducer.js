@@ -26,12 +26,16 @@ const gameReducer = (state, { type, payload }) => {
         isBoardEnabled: false,
         gameState: GameStates.MENU,
       };
-    case 'FINISH_GAME':
+    case 'CLEAR_BOARD':
       return {
         ...state,
         flipped: [],
         solved: [],
-        finishDate: Date.now(),
+      };
+    case 'FINISH_GAME':
+      return {
+        ...state,
+        finishDate: payload.finishDate,
         gameState: GameStates.FINISHED,
       };
     case 'ENABLE_BOARD':
